@@ -2,605 +2,204 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>§inapptron v40.1 - Neural OS</title>
-    
-    <!-- DEPENDENCIAS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>§inapptron v33 - NeuroArquitectura Final</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- FUENTES TECH & MODERN -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&family=Fira+Code:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Lato:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/phosphor-icons"></script>
     <script src='https://meet.jit.si/external_api.js'></script>
-    <!-- PRISM CODE HIGHLIGHTING -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-    
-    <!-- MOTOR 3D -->
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-            }
-        }
-    </script>
     
     <style>
-        /* --- VARIABLES & CONSTANTES VISUALES --- */
+        /* --- ARQUITECTURA DE COLOR DINÁMICA --- */
         :root {
-            --bg-deep: #030305;
-        }
-
-        /* TEMA ORO (DUNE TECH) */
-        body.theme-gold { 
-            --primary: #FFD700; /* Oro Puro */
-            --secondary: #FF6B00; /* Naranja Plasma */
-            --bg-gradient: linear-gradient(180deg, #120f00 0%, #000000 100%);
-            --glass-bg: rgba(20, 15, 5, 0.6);
-            --glass-border: rgba(255, 215, 0, 0.5);
-            --glow: 0 0 20px rgba(255, 180, 0, 0.5);
-            --hud-line: rgba(255, 215, 0, 0.15);
-            --avatar-color: 0xFFD700;
+            --color-primary-dark: #0B1120;
+            --color-surface: #1E293B;
+            --color-red: #EF4444;
+            
+            /* Colores de Tema (Valores por defecto NEÓN AZUL) */
+            --theme-accent: #00DDEE; /* Azul Neón */
+            --theme-primary: #0F5DAA; /* Azul Intenso */
+            --theme-surface-glow: rgba(0, 221, 238, 0.4);
         }
         
-        /* TEMA AZUL (TRON LEGACY) */
-        body.theme-blue { 
-            --primary: #00F3FF; /* Cian Neón */
-            --secondary: #0066FF; /* Azul Láser */
-            --bg-gradient: linear-gradient(180deg, #000814 0%, #000000 100%);
-            --glass-bg: rgba(0, 10, 20, 0.6);
-            --glass-border: rgba(0, 243, 255, 0.5);
-            --glow: 0 0 20px rgba(0, 243, 255, 0.5);
-            --hud-line: rgba(0, 243, 255, 0.15);
-            --avatar-color: 0x00F3FF;
+        .theme-gold {
+            --theme-accent: #FFCC00; /* Hyper Dorado */
+            --theme-primary: #D97706; /* Naranja/Oro */
+            --theme-surface-glow: rgba(255, 204, 0, 0.4);
         }
 
-        /* TIPOGRAFÍA CAMBIANTE */
-        body.font-modern { --font-display: 'Montserrat', sans-serif; --font-body: 'Rajdhani', sans-serif; }
-        body.font-classic { --font-display: 'Playfair Display', serif; --font-body: 'Montserrat', sans-serif; }
-        body.font-tech { --font-display: 'Orbitron', sans-serif; --font-body: 'Fira Code', monospace; }
-
-        /* --- RESET & BASICS --- */
         body {
-            font-family: var(--font-body);
-            background: var(--bg-gradient);
-            color: white;
-            height: 100dvh; width: 100vw;
-            overflow: hidden;
-            margin: 0; padding: 0;
-            transition: background 0.5s ease, color 0.5s ease;
+            font-family: 'Lato', sans-serif;
+            background-color: var(--color-primary-dark);
+            color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+            overflow: hidden; 
         }
 
-        /* --- FONDO ANIMADO (GRID SCIFI) --- */
-        .scifi-grid-bg {
-            position: absolute; inset: 0; z-index: 0;
-            background-image: 
-                linear-gradient(var(--hud-line) 1px, transparent 1px),
-                linear-gradient(90deg, var(--hud-line) 1px, transparent 1px);
-            background-size: 40px 40px;
-            perspective: 1000px;
-            transform-style: preserve-3d;
-            opacity: 0.3;
-            mask-image: radial-gradient(circle, black 40%, transparent 90%);
-            transition: opacity 0.5s ease;
+        .main-container {
+            width: 100%;
+            height: 100vh;
+            max-width: 450px;
+            background: linear-gradient(180deg, var(--color-primary-dark) 0%, #0F172A 100%);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 50px rgba(37, 99, 235, 0.15);
         }
 
-        /* --- BENTO GRID LAYOUT --- */
-        .bento-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            padding: 16px;
-            padding-bottom: 120px; /* Espacio para Nav */
+        /* --- Tipografía --- */
+        .font-title { font-family: 'Montserrat', sans-serif; font-weight: 900; letter-spacing: -0.02em; }
+        .font-body { font-family: 'Lato', sans-serif; }
+
+        #view-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-bottom: 80px;
+            scroll-behavior: smooth;
         }
-        
-        .bento-cell {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 16px;
+        #view-container::-webkit-scrollbar { width: 0px; background: transparent; }
+
+        /* --- Componentes de Material y Colores de Tema --- */
+        .card-material {
+            background-color: var(--color-surface);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s, border-color 0.5s;
-            box-shadow: var(--glow);
         }
-        .bento-cell:active { transform: scale(0.98); }
+        .card-material:active { transform: scale(0.98); }
         
-        .cell-profile { grid-column: span 1; height: 160px; display: flex; flex-direction: column; justify-content: space-between; }
-        .cell-status { grid-column: span 1; height: 160px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .cell-hero { grid-column: span 2; height: 180px; display: flex; align-items: center; justify-content: space-between; position: relative; }
-        .cell-wide { grid-column: span 2; height: 80px; display: flex; align-items: center; gap: 15px; }
-        .cell-tall { grid-column: span 1; height: 140px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; }
+        .text-accent { color: var(--theme-accent); }
+        .bg-accent { background-color: var(--theme-accent); }
+        .border-accent { border-color: var(--theme-accent); }
 
-        /* --- TIPOGRAFÍA --- */
-        h1, h2, h3, h4 { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 1px; }
-        .glow-text { text-shadow: 0 0 10px var(--primary); }
-
-        /* --- NAV FLOTANTE (CAPSULE) --- */
-        #floating-nav {
-            position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 400px; height: 70px;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--primary);
-            border-radius: 50px;
-            display: flex; justify-content: space-evenly; align-items: center;
-            z-index: 100;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px var(--glass-border);
-            transition: border-color 0.5s;
+        /* --- Barra Superior (Nueva Interfaz) --- */
+        #top-header {
+            background: rgba(11, 17, 32, 0.9);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 50;
         }
-        .nav-btn {
-            color: #666; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex; flex-direction: column; align-items: center;
-        }
-        .nav-btn.active { color: var(--primary); transform: translateY(-15px) scale(1.2); text-shadow: 0 0 10px var(--primary); }
-        .nav-btn i { font-size: 24px; margin-bottom: 2px; }
-        .nav-btn .dot { width: 4px; height: 4px; background: var(--primary); border-radius: 50%; opacity: 0; transition: 0.3s; }
-        .nav-btn.active .dot { opacity: 1; }
+        .header-icon { color: var(--theme-accent); }
 
-        /* --- CHAT 3D INTEGRADO --- */
-        #activity-view { position: relative; height: 100%; display: flex; flex-col; background: black; }
-        #chat-3d-layer { position: absolute; inset: 0; z-index: 0; opacity: 0.8; mask-image: linear-gradient(to bottom, black 50%, transparent 100%); }
-        #chat-ui-layer { position: relative; z-index: 10; height: 100%; display: flex; flex-direction: column; }
+        /* --- Barra Inferior (Nueva Interfaz) --- */
+        #bottom-nav {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: env(safe-area-inset-bottom);
+            z-index: 50;
+        }
+        .nav-item { color: #94A3B8; transition: all 0.3s; }
+        .nav-item.active { color: var(--theme-accent); transform: translateY(-2px); }
+        .nav-main-icon { color: var(--color-primary-dark); }
+        .nav-main-wrapper { background: linear-gradient(45deg, var(--theme-accent), var(--theme-primary)); }
+
+        #splash-screen { background: #0B1120; z-index: 100; }
         
-        .msg-bubble {
-            background: rgba(0,0,0,0.7); border-left: 3px solid var(--primary);
-            padding: 12px; margin: 8px 0; border-radius: 0 12px 12px 0;
-            font-family: var(--font-body); font-weight: 600; font-size: 16px;
-            backdrop-filter: blur(5px); max-width: 85%;
-            animation: slideIn 0.3s ease-out;
-        }
-        .msg-user { align-self: flex-end; border-left: none; border-right: 3px solid var(--secondary); text-align: right; border-radius: 12px 0 0 12px; background: rgba(255,255,255,0.05); }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
-
-        /* --- BUTTONS & INPUTS --- */
-        .btn-glitch {
-            background: var(--primary); color: black; font-weight: 900; font-family: var(--font-display);
-            border: none; padding: 12px; width: 100%; border-radius: 8px;
-            position: relative; overflow: hidden; transition: 0.3s; text-transform: uppercase;
-        }
-        .btn-glitch:hover { box-shadow: 0 0 30px var(--primary); letter-spacing: 2px; }
+        /* --- CHAT Y CEREBRO 3D --- */
+        .chat-message-bubble.sinapptron { background: #1E293B; border-left: 3px solid var(--theme-accent); color: #E2E8F0; }
+        .chat-message-bubble.user { background: linear-gradient(135deg, var(--theme-primary), #1D4ED8); color: white; border-bottom-right-radius: 4px; }
         
-        .mic-btn {
-            width: 40px; height: 40px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            background: rgba(0,0,0,0.5);
-            cursor: pointer;
+        #brain-3d-container {
+            width: 100%; height: 200px;
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.5) 0%, rgba(11, 17, 32, 0) 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .mic-btn.listening {
-            background: var(--secondary); color: white;
-            animation: pulseMic 1s infinite;
-            box-shadow: 0 0 15px var(--secondary);
-        }
-        @keyframes pulseMic { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
 
-        /* AVATAR SINAPPTRON */
-        .avatar-orb {
-            width: 100px; height: 100px;
-            background: radial-gradient(circle, var(--primary) 10%, transparent 70%);
-            border-radius: 50%; border: 2px solid var(--primary);
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 20px var(--primary), inset 0 0 20px var(--primary);
-            position: relative; transition: border-color 0.5s;
+        .brain-glow {
+            fill: var(--theme-accent);
+            filter: drop-shadow(0 0 15px var(--theme-accent));
+            opacity: 0.9;
+            transition: all 0.5s ease-out;
         }
-        .orb-ring {
-            position: absolute; inset: -10px; border: 1px dashed var(--secondary); border-radius: 50%;
-            animation: spin 10s linear infinite; transition: border-color 0.5s;
+        .brain-core {
+            fill: var(--theme-primary);
+            opacity: 0.5;
         }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .brain-active .brain-glow {
+            filter: drop-shadow(0 0 30px var(--theme-accent)) drop-shadow(0 0 15px var(--theme-accent));
+            animation: pulse-brain 1.5s infinite alternate;
+        }
+
+        @keyframes pulse-brain {
+            0% { transform: scale(1); opacity: 0.9; }
+            100% { transform: scale(1.05); opacity: 1; }
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--theme-accent), var(--theme-primary));
+            color: var(--color-primary-dark);
+            font-weight: 800;
+            box-shadow: 0 4px 15px var(--theme-surface-glow);
+            transition: all 0.2s;
+        }
+        .btn-primary:active { transform: scale(0.95); }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-left-color: var(--theme-accent);
+            border-radius: 50%; width: 20px; height: 20px;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
         
-        /* --- PANTALLAS DE CARGA & AUTH --- */
-        #splash-screen, #auth-view { z-index: 9999; background: black; }
+        #api-modal { backdrop-filter: blur(8px); z-index: 200; }
+        #jitsi-container { width: 100%; height: 100%; background: black; }
+        
+        .chat-audio-controls {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+            gap: 8px;
+        }
+        .chat-audio-controls button {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            background-color: var(--theme-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+        .chat-audio-controls button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .audio-loading-spinner {
+             border: 2px solid rgba(255, 255, 255, 0.2);
+             border-left-color: var(--theme-accent);
+             border-radius: 50%; width: 18px; height: 18px;
+             animation: spin 1s linear infinite;
+        }
     </style>
 </head>
-<body class="theme-gold font-modern">
+<body class="font-body selection:bg-blue-500 selection:text-white">
 
-    <!-- BACKGROUND GRID ANIMATION -->
-    <div class="scifi-grid-bg"></div>
-
-    <!-- 1. SPLASH SCREEN -->
-    <div id="splash-screen" class="fixed inset-0 flex flex-col items-center justify-center transition-opacity duration-1000">
-        <div class="avatar-orb mb-6 animate-pulse" style="width:80px; height:80px;">
-            <div class="orb-ring"></div>
-            <i class="ph-brain-fill text-4xl text-black z-10 relative"></i>
-        </div>
-        <h1 class="text-4xl font-bold tracking-widest text-white glow-text">SINAPPTRON</h1>
-        <div class="w-48 h-1 bg-gray-800 mt-4 rounded overflow-hidden">
-            <div class="h-full bg-white w-full animate-[loading_2s_ease-in-out_infinite]"></div>
-        </div>
-        <p class="text-xs text-gray-500 mt-2 font-mono">INIT_SEQUENCE_V40.1</p>
-    </div>
-
-    <!-- 2. AUTH VIEW -->
-    <div id="auth-view" class="fixed inset-0 flex flex-col items-center justify-center p-8 hidden opacity-0 transition-opacity duration-500">
-        <h1 class="text-6xl mb-2" style="color: var(--primary);">N.O.S.</h1>
-        <p class="text-gray-400 tracking-[0.5em] text-xs mb-12">NEURAL OPERATING SYSTEM</p>
-        
-        <div class="w-full max-w-xs bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-xl">
-            <button onclick="window.signInSystem()" class="btn-glitch mb-4">INICIAR ENLACE</button>
-            <button class="w-full py-3 text-xs text-gray-400 hover:text-white border border-transparent hover:border-white/20 rounded-lg transition">CREAR ID NEURONAL</button>
-        </div>
-    </div>
-
-    <!-- 3. MAIN APP CONTAINER -->
-    <div id="app-container" class="relative z-10 hidden opacity-0 transition-opacity duration-500 h-full">
-        
-        <!-- VIEWPORT -->
-        <div id="view-viewport" class="h-full overflow-y-auto no-scrollbar">
-
-            <!-- A. DASHBOARD -->
-            <div id="dashboard-view" class="bento-container">
-                
-                <!-- Profile Cell -->
-                <div class="bento-cell cell-profile cursor-pointer" onclick="window.changeView('profile')">
-                    <div class="flex justify-between items-start">
-                        <div class="text-[10px] text-gray-400 font-mono">ID: 8492-X</div>
-                        <i class="ph-gear-fill text-gray-500"></i>
-                    </div>
-                    <div>
-                        <div class="text-3xl font-bold glow-text leading-none mb-1">RICHARD</div>
-                        <div class="text-xl font-light opacity-80">FELIPE</div>
-                    </div>
-                    <div class="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center text-2xl bg-white/5" id="avatar-display-dash">👨‍💻</div>
-                </div>
-
-                <!-- Status Cell -->
-                <div class="bento-cell cell-status cursor-pointer" onclick="window.changeView('progress')">
-                    <div class="w-20 h-20 relative flex items-center justify-center">
-                        <svg class="absolute inset-0 w-full h-full rotate-[-90deg]" viewBox="0 0 36 36">
-                            <path class="text-gray-800" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2"/>
-                            <path class="text-[var(--primary)]" stroke-dasharray="75, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"/>
-                        </svg>
-                        <div class="flex flex-col items-center">
-                            <span class="text-2xl font-bold" id="xp-display">850</span>
-                            <span class="text-[8px] text-gray-400">XP</span>
-                        </div>
-                    </div>
-                    <div class="mt-2 text-[10px] tracking-widest text-[var(--secondary)] animate-pulse">ONLINE</div>
-                </div>
-
-                <!-- HERO: CHAT 3D PORTAL -->
-                <div class="bento-cell cell-hero cursor-pointer group" onclick="window.changeView('activity')">
-                    <div class="absolute inset-0 bg-gradient-to-r from-black to-transparent z-0"></div>
-                    <div class="absolute right-[-20px] top-[-20px] opacity-20 group-hover:opacity-40 transition duration-500">
-                        <i class="ph-chat-teardrop-text-fill text-9xl text-[var(--primary)]"></i>
-                    </div>
-                    <div class="relative z-10 p-2">
-                        <div class="flex items-center gap-2 mb-2">
-                            <div class="w-2 h-2 bg-[var(--primary)] rounded-full animate-ping"></div>
-                            <span class="text-[10px] text-[var(--primary)] font-mono">ENLACE ACTIVO</span>
-                        </div>
-                        <h2 class="text-3xl text-white mb-1 group-hover:translate-x-2 transition">CHAT<br>NEURAL 3D</h2>
-                        <p class="text-xs text-gray-400 w-2/3">Interfaz inmersiva con entrada de voz.</p>
-                    </div>
-                    <div class="relative z-10 w-12 h-12 rounded-full border border-[var(--primary)] flex items-center justify-center bg-black/50 group-hover:scale-110 transition">
-                        <i class="ph-microphone-fill text-[var(--primary)]"></i>
-                    </div>
-                </div>
-
-                <!-- WIDE: VIDEO LINK -->
-                <div class="bento-cell cell-wide cursor-pointer" onclick="window.openVideoSelection()">
-                    <div class="w-10 h-10 bg-red-900/30 rounded flex items-center justify-center text-red-500 border border-red-500/50">
-                        <i class="ph-video-camera-fill text-xl"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold">VIDEO SECURE</h3>
-                        <p class="text-[10px] text-gray-400">Canal Encriptado Familia/IA</p>
-                    </div>
-                </div>
-
-                <!-- TALL CELLS -->
-                <div class="bento-cell cell-tall cursor-pointer" onclick="window.changeView('codex')">
-                    <i class="ph-code-block text-3xl text-green-400 mb-2"></i>
-                    <h3 class="text-xs">CODEX</h3>
-                </div>
-                <div class="bento-cell cell-tall cursor-pointer" onclick="window.changeView('exercises')">
-                    <i class="ph-barbell text-3xl text-blue-400 mb-2"></i>
-                    <h3 class="text-xs">GYM</h3>
-                </div>
-            </div>
-
-            <!-- B. CHAT 3D VIEW -->
-            <div id="activity-view" class="hidden h-full relative bg-black">
-                <!-- 3D CANVAS BACKGROUND -->
-                <div id="chat-3d-layer"><canvas id="chat-canvas" class="w-full h-full"></canvas></div>
-                
-                <!-- UI OVERLAY -->
-                <div id="chat-ui-layer" class="p-4 pb-32">
-                    <div class="flex justify-between items-center mb-4">
-                        <button onclick="window.changeView('dashboard')" class="w-10 h-10 rounded-full border border-white/20 bg-black/50 text-white backdrop-blur flex items-center justify-center hover:bg-white/10"><i class="ph-arrow-left"></i></button>
-                        <div class="text-[10px] text-[var(--primary)] tracking-[0.3em] font-mono">SISTEMA_V40</div>
-                        <div class="w-10"></div>
-                    </div>
-                    
-                    <div id="chat-window" class="flex-grow overflow-y-auto no-scrollbar space-y-4 p-2">
-                        <!-- Mensajes inyectados por JS -->
-                    </div>
-
-                    <!-- INPUT AREA (VOICE + PLAY/STOP) -->
-                    <div class="mt-4 bg-black/80 border border-[var(--glass-border)] rounded-2xl p-2 flex items-center gap-2 backdrop-blur-xl shadow-2xl">
-                        <!-- PLAY/STOP TTS -->
-                        <button onclick="window.toggleVoice(true)" class="w-10 h-10 rounded-xl bg-green-900/20 text-green-400 border border-green-500/30 flex items-center justify-center"><i class="ph-play-fill"></i></button>
-                        <button onclick="window.toggleVoice(false)" class="w-10 h-10 rounded-xl bg-red-900/20 text-red-400 border border-red-500/30 flex items-center justify-center"><i class="ph-stop-fill"></i></button>
-                        
-                        <!-- TEXT INPUT -->
-                        <input type="text" id="chat-input" placeholder="Comando..." class="bg-transparent flex-grow text-sm text-white outline-none font-mono px-2">
-                        
-                        <!-- MICROPHONE BTN (NUEVO) -->
-                        <button id="mic-btn" onclick="window.startDictation()" class="mic-btn">
-                            <i class="ph-microphone-fill text-xl"></i>
-                        </button>
-                        
-                        <!-- SEND BTN -->
-                        <button onclick="window.sendChat()" class="w-10 h-10 rounded-xl bg-[var(--primary)] text-black font-bold flex items-center justify-center hover:scale-105 transition"><i class="ph-paper-plane-right-fill"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- C. GYM / EXERCISES VIEW -->
-            <div id="exercises-view" class="hidden p-6 pt-10 pb-32 space-y-6">
-                <header class="flex items-center gap-4 mb-8"><button onclick="window.changeView('dashboard')" class="text-gray-400"><i class="ph-arrow-left text-2xl"></i></button><h2 class="text-3xl glow-text">ENTRENAMIENTO</h2></header>
-                <div class="grid gap-4">
-                    <div onclick="window.changeView('feynman')" class="bento-cell cursor-pointer hover:border-[var(--primary)] flex gap-4 items-center"><div class="p-3 bg-blue-500/20 rounded-lg text-blue-400"><i class="ph-brain text-2xl"></i></div><div><h3 class="text-lg">FEYNMAN</h3><p class="text-xs text-gray-400">Comprensión</p></div></div>
-                    <div onclick="window.changeView('sparring')" class="bento-cell cursor-pointer hover:border-[var(--secondary)] flex gap-4 items-center"><div class="p-3 bg-orange-500/20 rounded-lg text-orange-400"><i class="ph-sword text-2xl"></i></div><div><h3 class="text-lg">SPARRING</h3><p class="text-xs text-gray-400">Debate</p></div></div>
-                </div>
-            </div>
-
-            <!-- D. PROFILE VIEW (CONFIGURACIÓN RESTAURADA) -->
-            <div id="profile-view" class="hidden p-6 pt-10 pb-32 space-y-6">
-                <header class="flex gap-4 mb-6"><button onclick="window.changeView('dashboard')"><i class="ph-arrow-left text-2xl"></i></button><h2>AJUSTES DEL NÚCLEO</h2></header>
-                
-                <!-- THEME SELECTOR -->
-                <div class="bento-cell">
-                    <h3 class="text-xs text-gray-500 mb-4 font-mono">PROTOCOLO VISUAL</h3>
-                    <div class="flex gap-3">
-                        <button onclick="window.app.setTheme('gold')" class="flex-1 py-4 border border-yellow-500 bg-yellow-900/20 text-yellow-500 font-bold rounded hover:bg-yellow-500/30 transition">GOLD</button>
-                        <button onclick="window.app.setTheme('blue')" class="flex-1 py-4 border border-cyan-500 bg-cyan-900/20 text-cyan-500 font-bold rounded hover:bg-cyan-500/30 transition">BLUE</button>
-                    </div>
-                </div>
-
-                <!-- FONT SELECTOR (RESTAURADO) -->
-                <div class="bento-cell">
-                    <h3 class="text-xs text-gray-500 mb-4 font-mono">TIPOGRAFÍA DE INTERFAZ</h3>
-                    <div class="space-y-2">
-                        <button onclick="window.app.setFont('modern')" class="w-full py-3 border border-white/10 rounded text-left px-4 hover:bg-white/10 flex justify-between items-center transition font-sans"><span>MODERNA</span> <i class="ph-text-aa-bold"></i></button>
-                        <button onclick="window.app.setFont('classic')" class="w-full py-3 border border-white/10 rounded text-left px-4 hover:bg-white/10 flex justify-between items-center transition font-serif"><span>CLÁSICA</span> <i class="ph-text-t-bold"></i></button>
-                        <button onclick="window.app.setFont('tech')" class="w-full py-3 border border-white/10 rounded text-left px-4 hover:bg-white/10 flex justify-between items-center transition font-mono"><span>TECH</span> <i class="ph-code-bold"></i></button>
-                    </div>
-                </div>
-
-                <!-- AVATAR SELECTOR -->
-                <div class="bento-cell">
-                    <h3 class="text-xs text-gray-500 mb-4 font-mono">AVATAR ID</h3>
-                    <div class="flex justify-between text-2xl">
-                        <button onclick="window.app.setAvatar('👨‍💻')" class="hover:scale-125 transition">👨‍💻</button>
-                        <button onclick="window.app.setAvatar('🦁')" class="hover:scale-125 transition">🦁</button>
-                        <button onclick="window.app.setAvatar('🧠')" class="hover:scale-125 transition">🧠</button>
-                        <button onclick="window.app.setAvatar('🤖')" class="hover:scale-125 transition">🤖</button>
-                    </div>
-                </div>
-                
-            </div>
-
-            <!-- E. CODEX VIEW -->
-            <div id="codex-view" class="hidden p-6 pt-10 pb-32 h-full flex flex-col">
-                <header class="flex items-center gap-4 mb-6"><button onclick="window.changeView('dashboard')" class="text-gray-400"><i class="ph-arrow-left text-2xl"></i></button><h2 class="text-3xl text-green-400 glow-text">CODEX</h2></header>
-                <div class="bg-gray-900/80 border border-green-500/30 p-4 rounded-xl mb-4">
-                    <div class="flex items-center gap-2 text-[10px] text-green-500 mb-2 font-mono"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> INPUT_STREAM</div>
-                    <textarea id="codex-prompt" rows="3" class="w-full bg-transparent text-white font-mono text-sm outline-none resize-none" placeholder="Describe la función..."></textarea>
-                </div>
-                <button onclick="window.generateCode()" class="btn-glitch mb-6" style="background: #10b981; color: #000;">GENERAR</button>
-                <div id="codex-output" class="flex-grow overflow-y-auto rounded-xl border border-white/10 bg-black/50"></div>
-            </div>
-
-            <!-- SUBVIEWS (Feynman/Sparring/Progress) -->
-            <div id="feynman-view" class="hidden p-6 pt-10 pb-32"><header class="flex gap-4 mb-6"><button onclick="window.changeView('exercises')"><i class="ph-arrow-left text-2xl"></i></button><h2>FEYNMAN</h2></header><div class="bento-cell mb-6 text-center"><div class="text-[var(--primary)] text-4xl font-bold mb-2" id="feynman-percent">0%</div><div class="h-2 bg-gray-800 rounded-full overflow-hidden"><div id="feynman-bar-fill" class="h-full bg-[var(--primary)] w-0 transition-all duration-500"></div></div></div><div class="space-y-3"><label class="flex items-center gap-4 p-4 bg-white/5 rounded-xl border border-white/10 cursor-pointer"><input type="checkbox" id="check-fey-1" onchange="window.updateFeynman()" class="accent-[var(--primary)] w-5 h-5"> <span class="text-sm font-bold">1. CONCEPTO</span></label><label class="flex items-center gap-4 p-4 bg-white/5 rounded-xl border border-white/10 cursor-pointer"><input type="checkbox" id="check-fey-2" onchange="window.updateFeynman()" class="accent-[var(--primary)] w-5 h-5"> <span class="text-sm font-bold">2. EXPLICAR</span></label><label class="flex items-center gap-4 p-4 bg-white/5 rounded-xl border border-white/10 cursor-pointer"><input type="checkbox" id="check-fey-3" onchange="window.updateFeynman()" class="accent-[var(--primary)] w-5 h-5"> <span class="text-sm font-bold">3. REFINAR</span></label><label class="flex items-center gap-4 p-4 bg-white/5 rounded-xl border border-white/10 cursor-pointer"><input type="checkbox" id="check-fey-4" onchange="window.updateFeynman()" class="accent-[var(--primary)] w-5 h-5"> <span class="text-sm font-bold">4. SIMPLIFICAR</span></label></div></div>
-            <div id="sparring-view" class="hidden p-6 pt-10 pb-32"><header class="flex gap-4 mb-6"><button onclick="window.changeView('exercises')"><i class="ph-arrow-left text-2xl"></i></button><h2>ARENA</h2></header><div class="space-y-4"><button onclick="window.startSparring('Filosofía')" class="w-full p-6 bg-gradient-to-r from-purple-900/40 to-transparent border border-purple-500/30 text-left rounded-xl hover:border-purple-500 transition"><h3 class="text-xl">FILOSOFÍA</h3></button><button onclick="window.startSparring('Tecnología')" class="w-full p-6 bg-gradient-to-r from-cyan-900/40 to-transparent border border-cyan-500/30 text-left rounded-xl hover:border-cyan-500 transition"><h3 class="text-xl">TECNOLOGÍA</h3></button></div></div>
-            <div id="progress-view" class="hidden p-6 pt-10 pb-32 text-center"><header class="flex gap-4 mb-6"><button onclick="window.changeView('dashboard')"><i class="ph-arrow-left text-2xl"></i></button><h2>DATA</h2></header><div class="text-9xl font-bold glow-text" id="level-display">8</div><div class="text-sm tracking-[0.5em] text-gray-400">SYNC LEVEL</div></div>
-
-        </div>
-
-        <!-- 4. FLOATING NAV -->
-        <nav id="floating-nav">
-            <div onclick="window.changeView('dashboard')" class="nav-btn active" data-target="dashboard"><i class="ph-squares-four"></i><div class="dot"></div></div>
-            <div onclick="window.changeView('exercises')" class="nav-btn" data-target="exercises"><i class="ph-barbell"></i><div class="dot"></div></div>
-            <div onclick="window.changeView('activity')" class="nav-btn" data-target="activity"><i class="ph-chat-circle-dots"></i><div class="dot"></div></div>
-            <div onclick="window.changeView('codex')" class="nav-btn" data-target="codex"><i class="ph-code"></i><div class="dot"></div></div>
-            <div onclick="window.changeView('profile')" class="nav-btn" data-target="profile"><i class="ph-user-circle-gear"></i><div class="dot"></div></div>
-        </nav>
-
-    </div>
-
-    <!-- 5. OVERLAYS -->
-    <div id="video-call-view" class="fixed inset-0 z-[9000] hidden bg-black flex flex-col">
-         <div class="h-16 flex items-center justify-between px-4 border-b border-gray-800">
-             <h3 class="text-white">VIDEO ENLACE</h3>
-             <button onclick="document.getElementById('video-call-view').classList.add('hidden')" class="text-red-500"><i class="ph-x-circle text-3xl"></i></button>
-         </div>
-         <div id="jitsi-container" class="flex-grow bg-gray-900"></div>
-    </div>
-
-    <script type="module">
-        // --- AQUI ESTA TU CONFIGURACION DE FIREBASE INTEGRADA ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        
-        import * as THREE from 'three';
-        
-        // CONFIGURACION EXACTA PROPORCIONADA POR TI
-        const firebaseConfig = {
-            apiKey: "AIzaSyCJ41kKN5n7uXMw-FUCeUWW8oXVOl0imMw",
-            authDomain: "sinapptron.firebaseapp.com",
-            projectId: "sinapptron",
-            storageBucket: "sinapptron.firebasestorage.app",
-            messagingSenderId: "130032560769",
-            appId: "1:130032560769:web:0e489e6e9da2c782adbb80",
-            measurementId: "G-KM8PCZX8QG"
-        };
-
-        // INICIALIZACION
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        let currentUser = null;
-
-        // --- LOGICA GLOBAL DEL SISTEMA ---
-        window.app = {
-            setTheme: (t) => { document.body.className = document.body.className.replace(/theme-\w+/, `theme-${t}`); },
-            setFont: (f) => { document.body.className = document.body.className.replace(/font-\w+/, `font-${f}`); },
-            setAvatar: (a) => { document.getElementById('avatar-display-dash').textContent = a; }
-        };
-
-        // AUTENTICACION
-        window.signInSystem = async () => {
-            try {
-                await signInAnonymously(auth);
-            } catch (error) {
-                console.error("Error Auth:", error);
-            }
-        };
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user;
-                document.getElementById('auth-view').classList.add('hidden');
-                document.getElementById('auth-view').classList.remove('flex');
-                document.getElementById('app-container').classList.remove('hidden');
-                setTimeout(() => document.getElementById('app-container').classList.remove('opacity-0'), 100);
-                initChatListener();
-            } else {
-                document.getElementById('splash-screen').classList.add('opacity-0');
-                setTimeout(() => {
-                    document.getElementById('splash-screen').classList.add('hidden');
-                    document.getElementById('auth-view').classList.remove('hidden');
-                    document.getElementById('auth-view').classList.add('flex');
-                    setTimeout(() => document.getElementById('auth-view').classList.remove('opacity-0'), 100);
-                }, 1000);
-            }
-        });
-
-        // NAVEGACION
-        window.changeView = (viewName) => {
-            // Ocultar todas las vistas principales
-            ['dashboard', 'exercises', 'activity', 'codex', 'profile', 'feynman', 'sparring', 'progress'].forEach(v => {
-                const el = document.getElementById(v + '-view');
-                if(el) el.classList.add('hidden');
-            });
-            
-            // Mostrar vista destino
-            const target = document.getElementById(viewName + '-view');
-            if(target) target.classList.remove('hidden');
-
-            // Actualizar Nav
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.dataset.target === viewName) btn.classList.add('active');
-            });
-        };
-
-        // CHAT SYSTEM (FIRESTORE)
-        async function initChatListener() {
-            const q = query(collection(db, "messages"), orderBy("timestamp", "desc"), limit(20));
-            onSnapshot(q, (snapshot) => {
-                const chatWindow = document.getElementById('chat-window');
-                chatWindow.innerHTML = ''; // Limpiar y repoblar
-                const msgs = [];
-                snapshot.forEach((doc) => msgs.push(doc.data()));
-                msgs.reverse().forEach(msg => {
-                    const div = document.createElement('div');
-                    div.className = `msg-bubble ${msg.uid === currentUser.uid ? 'msg-user' : ''}`;
-                    div.textContent = msg.text;
-                    chatWindow.appendChild(div);
-                });
-                chatWindow.scrollTop = chatWindow.scrollHeight;
-            });
-        }
-
-        window.sendChat = async () => {
-            const input = document.getElementById('chat-input');
-            const text = input.value;
-            if (!text || !currentUser) return;
-            
-            try {
-                await addDoc(collection(db, "messages"), {
-                    text: text,
-                    uid: currentUser.uid,
-                    timestamp: Date.now()
-                });
-                input.value = '';
-            } catch (e) {
-                console.error("Error enviando:", e);
-            }
-        };
-        
-        // 3D BACKGROUND (THREE.JS)
-        const canvas = document.getElementById('chat-canvas');
-        if(canvas) {
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            
-            const geometry = new THREE.IcosahedronGeometry(1, 1);
-            const material = new THREE.MeshBasicMaterial({ color: 0x444444, wireframe: true });
-            const sphere = new THREE.Mesh(geometry, material);
-            scene.add(sphere);
-            camera.position.z = 3;
-            
-            function animate() {
-                requestAnimationFrame(animate);
-                sphere.rotation.x += 0.001;
-                sphere.rotation.y += 0.002;
-                renderer.render(scene, camera);
-            }
-            animate();
-        }
-
-        // VIDEO CALL
-        window.openVideoSelection = () => {
-            document.getElementById('video-call-view').classList.remove('hidden');
-            const domain = 'meet.jit.si';
-            const options = {
-                roomName: 'Sinapptron_Secure_Link_' + Math.random().toString(36).substring(7),
-                width: '100%',
-                height: '100%',
-                parentNode: document.querySelector('#jitsi-container'),
-                interfaceConfigOverwrite: { TOOLBAR_BUTTONS: ['microphone', 'camera', 'hangup'] }
-            };
-            const api = new JitsiMeetExternalAPI(domain, options);
-        };
-        
-        // CODEX DEMO
-        window.generateCode = () => {
-            const prompt = document.getElementById('codex-prompt').value;
-            const output = document.getElementById('codex-output');
-            output.innerHTML = `<pre><code class="language-javascript">// Generando para: ${prompt}...\nfunction neuralLink() { return true; }</code></pre>`;
-            Prism.highlightAll();
-        };
-
-        // FEYNMAN DEMO
-        window.updateFeynman = () => {
-            const checks = [1,2,3,4].map(i => document.getElementById(`check-fey-${i}`).checked);
-            const count = checks.filter(Boolean).length;
-            const pct = (count / 4) * 100;
-            document.getElementById('feynman-percent').innerText = `${pct}%`;
-            document.getElementById('feynman-bar-fill').style.width = `${pct}%`;
-        }
-
-        // INICIO AUTOMATICO DE SPLASH
-        setTimeout(() => {
-            // Check Auth State lo maneja
-        }, 2000);
-
-    </script>
-</body>
-</html>
-
+    <!-- RAW CSV DATA (CONOCIMIENTO CUÁNTICO NEURO-ÉTICO) -->
+    <script id="raw-csv-data-script">
+        const RAW_CSV_DATA = `Lóbulo,ID,Término,Definición Ampliada,Ejemplos Prácticos,Áreas Cerebrales Involucradas,Estrategias de Intervención,Teorías/Estudios Clave
+Frontal,12001,Juicio Moral,"Capacidad de evaluar la corrección o incorrección de una acción o situación, basándose en principios éticos y valores morales. Implica la capacidad de razonar sobre las consecuencias de las acciones y tomar decisiones informadas.","Un juez que decide la sentencia de un criminal. Un político que vota sobre una ley. Un individuo que decide si debe decir la verdad o mentir en una situación difícil. Un sistema de IA que evalúa si una acción es ética.",Corteza prefrontal (CPF), corteza cingulada anterior (CCA),Desarrollar la capacidad de razonamiento moral. Fomentar la empatía y la compasión. Promover la reflexión sobre los valores personales. Exponerse a diferentes perspectivas morales.,Teoría del Desarrollo Moral de Kohlberg, Ética Utilitarista, Ética Deontológica
+Frontal,12002,Control de Impulsos,"Capacidad de regular los propios impulsos y deseos, resistiendo la tentación de actuar de manera inapropiada o perjudicial. Implica la capacidad de retrasar la gratificación y considerar las consecuencias a largo plazo.","Un adicto que resiste la tentación de consumir drogas. Una persona que evita gastar dinero en cosas innecesarias. Un niño que espera su turno para hablar. Un sistema de IA que evita tomar decisiones impulsivas.",Corteza prefrontal (CPF), amígdala,Desarrollar estrategias de afrontamiento. Practicar la meditación mindfulness. Establecer metas realistas. Buscar apoyo social.,Modelo de Autocontrol de Baumeister, Teoría de la Regulación Emocional de Gross
+Frontal,12003,Planificación del Comportamiento Ético,"Capacidad de anticipar situaciones que requieren decisiones éticas y desarrollar planes para actuar de manera consistente con los propios valores morales. Implica la capacidad de identificar los riesgos éticos y tomar medidas preventivas.","Un líder empresarial que desarrolla un código de conducta para su empresa. Un médico que crea un plan para manejar conflictos de interés. Un individuo que decide cómo actuar en una situación de dilema ético. Un sistema de IA que planifica cómo interactuar con los humanos de manera ética.",Corteza prefrontal (CPF), corteza parietal,Desarrollar la conciencia ética. Identificar los riesgos éticos. Establecer principios éticos claros. Practicar la toma de decisiones éticas.,Ética de la Virtud de Aristóteles, Teoría de la Justicia de Rawls
+Temporal,12004,Comprensión de Narrativas Morales,"Capacidad de entender y apreciar las historias que transmiten valores morales y lecciones éticas. Implica la capacidad de identificarse con los personajes, comprender sus motivaciones y evaluar sus acciones.","Un lector que comprende el mensaje moral de una novela. Un espectador que se emociona con una película que promueve la justicia. Un niño que aprende sobre la importancia de la honestidad a través de un cuento. Un sistema de IA que analiza narrativas para extraer lecciones morales.",Corteza temporal superior, corteza temporal inferior,Exponerse a diferentes tipos de narrativas morales. Discutir y analizar las narrativas con otros. Reflexionar sobre las lecciones morales que se aprenden.,Teoría del Desarrollo Psicosocial de Erikson, Psicología Narrativa de Bruner
+Temporal,12005,Memoria Emocional,"Capacidad de recordar experiencias pasadas que están asociadas con emociones específicas. Implica la capacidad de evocar sentimientos y sensaciones que se experimentaron en el pasado.","Una persona que recuerda con cariño un momento feliz de su infancia. Un veterano de guerra que experimenta flashbacks de un evento traumático. Un individuo que siente miedo al recordar un accidente. Un sistema de IA que recuerda experiencias pasadas para tomar decisiones emocionales.",Amígdala, hipocampo, corteza temporal,Practicar la terapia de exposición. Utilizar técnicas de relajación. Buscar apoyo emocional. Reinterpretar los recuerdos traumáticos.,Teoría de la Memoria Emocional de LeDoux, Modelo de Memoria de Trabajo de Baddeley
+Temporal,12006,Asociaciones Subconscientes,"Conexiones mentales que se forman fuera de la conciencia y que pueden influir en el comportamiento y las actitudes. Implica la capacidad de asociar conceptos, emociones y experiencias de manera automática.","Un individuo que asocia automáticamente la palabra ""doctor"" con ""inteligencia"". Una persona que siente miedo al ver una araña sin saber por qué. Un sistema de IA que aprende a asociar palabras con emociones. Un sistema de IA que aprende a asociar acciones con recompensas.",Amígdala, hipocampo, corteza temporal,Practicar la meditación mindfulness. Utilizar técnicas de terapia cognitivo-conductual. Exponerse a diferentes estímulos. Reflexionar sobre los propios prejuicios.,Prueba de Asociación Implícita (IAT), Teoría del Aprendizaje Asociativo de Pavlov
+Parietal,12007,Conciencia del Yo,"Capacidad de reconocerse a sí mismo como un individuo distinto de los demás, con sus propios pensamientos, sentimientos y experiencias. Implica la capacidad de reflexionar sobre el propio ser y comprender la propia identidad.","Un niño que se reconoce en un espejo. Un adulto que reflexiona sobre sus valores y creencias. Un individuo que se da cuenta de que está experimentando una emoción. Un sistema de IA que se reconoce a sí mismo como un agente autónomo.",Corteza parietal, corteza prefrontal (CPF),Practicar la meditación mindfulness. Escribir un diario. Buscar retroalimentación de otros. Explorar diferentes identidades.,Teoría del Espejo de Lacan, Psicología del Yo de Jung
+Parietal,12008,Teoría de la Mente,"Capacidad de comprender que otras personas tienen sus propios pensamientos, sentimientos y creencias, que pueden ser diferentes de los propios. Implica la capacidad de ponerse en el lugar de los demás y predecir su comportamiento.","Un niño que entiende que su amigo puede tener una opinión diferente sobre un juguete. Un adulto que negocia con otro entendiendo sus motivaciones. Un individuo que empatiza con el dolor de otra persona. Un sistema de IA que predice el comportamiento de los humanos.",Corteza parietal, corteza prefrontal (CPF), corteza temporal superior,Practicar la empatía. Exponerse a diferentes perspectivas. Leer ficción. Participar en juegos de rol.,Prueba de la Falsa Creencia, Teoría de la Mente de Premack y Woodruff
+Sistema Límbico,12009,Emociones Morales,"Sentimientos que surgen en respuesta a situaciones que implican un juicio moral, como la culpa, la vergüenza, el orgullo y la indignación. Implican una evaluación de la propia conducta o la de otros en relación con los principios morales.","Un individuo que se siente culpable por haber mentido. Una persona que se siente orgullosa de haber ayudado a alguien. Un espectador que se indigna ante una injusticia. Un sistema de IA que simula emociones morales para tomar decisiones éticas.",Amígdala, corteza cingulada anterior (CCA), hipotálamo,Practicar la auto-compasión. Fomentar la empatía. Reflexionar sobre los propios valores morales. Expresar las emociones de manera saludable.,Teoría de las Emociones Morales de Haidt, Modelo de Evaluación Cognitiva de Lazarus
+Sistema Límbico,12010,Fe y Creencia,"Confianza en algo que no se puede probar empíricamente, como una deidad, un principio o una ideología. Implica la aceptación de ciertas ideas como verdaderas, incluso en ausencia de evidencia concluyente.","Un creyente que confía en la existencia de Dios. Un científico que cree en la validez de una teoría. Un individuo que tiene fe en el futuro. Un sistema de IA que cree en la validez de sus propios modelos.",Amígdala, hipocampo, corteza prefrontal (CPF),Explorar diferentes perspectivas. Reflexionar sobre las propias creencias. Participar en rituales y prácticas religiosas. Buscar apoyo en la comunidad.,Psicología de la Religión de James, Teoría de la Disonancia Cognitiva de Festinger
+Sistema Límbico,12011,Lealtad y Apego,"Sentimiento de devoción y compromiso hacia una persona, un grupo o una causa. Implica la disposición a defender y apoyar a aquellos a quienes se es leal, incluso a costa de sacrificio personal.","Un soldado que lucha por su país. Un miembro de una familia que apoya a sus seres queridos. Un empleado que se dedica a su trabajo. Un sistema de IA que protege a los humanos.",Amígdala, hipotálamo, corteza prefrontal (CPF),Fomentar la confianza y la reciprocidad. Celebrar los logros y los valores compartidos. Proporcionar apoyo en tiempos de necesidad. Establecer límites claros.,Teoría del Apego de Bowlby, Psicología Social de Tajfel
+Lóbulo,ID,Término,Definición Ampliada,Ejemplos Prácticos,Áreas Cerebrales Involucradas,Estrategias de Intervención,Teorías/Estudios Clave,Aplicaciones en la Realidad
+Frontal,13001,Planificación Quirúrgica,"Capacidad de anticipar y planificar todos los pasos de una cirugía compleja, considerando la anatomía del paciente, los riesgos potenciales y las posibles complicaciones. Implica la capacidad de visualizar el procedimiento en 3D y tomar decisiones en tiempo real.","Un cirujano que utiliza imágenes de resonancia magnética para planificar una resección tumoral. Un sistema de IA que simula una cirugía para optimizar la técnica. Un equipo quirúrgico que realiza una simulación de crisis para prepararse para posibles complicaciones.",Corteza prefrontal (CPF), corteza parietal, corteza motora,Utilizar herramientas de visualización 3D. Realizar simulaciones quirúrgicas. Desarrollar protocolos de gestión de crisis. Aprender de la experiencia de otros cirujanos.,Listas de verificación de la OMS para la seguridad quirúrgica, Cirugía robótica, Planificación preoperatoria basada en imágenes.
+Frontal,13002,Razonamiento Diagnóstico,"Capacidad de analizar los síntomas, los signos y los resultados de las pruebas para llegar a un diagnóstico preciso. Implica la capacidad de integrar información de diferentes fuentes y aplicar el conocimiento médico para resolver problemas.","Un médico que utiliza el historial del paciente, el examen físico y las pruebas de laboratorio para diagnosticar una enfermedad rara. Un sistema de IA que analiza datos médicos para identificar patrones y predecir el riesgo de enfermedad. Un equipo médico que realiza una conferencia de casos para discutir un diagnóstico difícil.",Corteza prefrontal (CPF), corteza temporal, corteza parietal,Utilizar algoritmos de diagnóstico. Consultar bases de datos médicas. Participar en actividades de formación continua. Aprender de los errores diagnósticos.,Algoritmos de diagnóstico diferencial, Sistemas de soporte a la decisión clínica, Telemedicina.
+Frontal,13003,Desarrollo de Nuevas Terapias,"Capacidad de diseñar y desarrollar nuevos tratamientos para enfermedades, basándose en el conocimiento de la biología, la química y la farmacología. Implica la capacidad de innovar, experimentar y validar nuevas ideas.","Un científico que descubre un nuevo fármaco para tratar el cáncer. Un ingeniero que desarrolla un nuevo dispositivo médico para mejorar la calidad de vida. Un médico que adapta un tratamiento existente para tratar una enfermedad rara. Un sistema de IA que diseña nuevas moléculas para atacar objetivos terapéuticos.",Corteza prefrontal (CPF), corteza temporal, corteza parietal,Utilizar técnicas de investigación científica. Colaborar con expertos de diferentes disciplinas. Buscar financiación para la investigación. Proteger la propiedad intelectual.,Ensayos clínicos, Investigación traslacional, Medicina personalizada.
+Temporal,13004,Memoria Médica,"Capacidad de almacenar y recuperar información sobre enfermedades, tratamientos, procedimientos y protocolos médicos. Implica la capacidad de recordar detalles específicos y relacionarlos con el contexto adecuado.","Un médico que recuerda los síntomas de una enfermedad rara que solo ha visto una vez. Un estudiante de medicina que memoriza la anatomía humana. Un sistema de IA que almacena y recupera información de la literatura médica. Un farmacéutico que recuerda las interacciones medicamentosas.",Corteza temporal, hipocampo,Utilizar técnicas de memorización. Crear mapas conceptuales. Repasar la información regularmente. Utilizar herramientas de gestión del conocimiento.,Bases de datos médicas, Sistemas de gestión del conocimiento, Aprendizaje electrónico.
+Temporal,13005,Comprensión de la Fisiopatología,"Capacidad de entender los mecanismos por los cuales las enfermedades alteran la función normal del cuerpo. Implica la capacidad de relacionar los síntomas y los signos con los procesos biológicos subyacentes.","Un médico que explica cómo la diabetes afecta el metabolismo de la glucosa. Un estudiante de medicina que estudia la pa
